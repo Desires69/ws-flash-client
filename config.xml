@@ -1,0 +1,20 @@
+<flex-config>
+
+	<target-player>10.1.0</target-player>
+	<output>public/ws-flash-client.swf</output>
+	<static-link-runtime-shared-libraries>true</static-link-runtime-shared-libraries>
+
+	<compiler>
+
+		<incremental>false</incremental>
+		<optimize>true</optimize>
+		<debug>false</debug>
+
+		<source-path append="true">
+			<path-element>as/src/</path-element>
+			<path-element>as/third-party/</path-element>
+		</source-path>
+
+	</compiler>
+
+</flex-config>

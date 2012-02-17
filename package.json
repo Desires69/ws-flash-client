@@ -1,0 +1,27 @@
+{
+	"author": "Juraj Vitko (@ypocat)",
+	"name": "ws-flash-client",
+	"description": "gimite's web-socket-js Flash client shim repackaged as a Connect middleware",
+	"keywords": [ "websockets", "websocket", "flash", "connect", "middleware", "express", "html5", "shim" ],
+	"version": "0.0.1",
+	"homepage": "http://github.com/ypocat/ws-flash-client",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ypocat/ws-flash-client.git"
+	},
+	"main": "./lib/ws-flash-client.js",
+	"directories": {
+		"lib": "./lib",
+		"as": "./as"
+	},
+	"engines": {
+		"node": ">= 0.4.0"
+	},
+	"dependencies": {
+	},
+	"devDependencies": {
+	},
+	"licenses": [
+		{  "type" : "BSD New", "url" : "https://raw.github.com/ypocat/ws-flash-client/master/LICENSE" }
+	]
+}
