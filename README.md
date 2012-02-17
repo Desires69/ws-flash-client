@@ -46,7 +46,7 @@ On command line:
 In your main script.js:
 
 ```js
-var prod = process.env.NODE_ENV === 'production;
+var prod = process.env.NODE_ENV === 'production';
 var app = require('express').createServer();
 var wss = new (require('ws').Server)({ server: app });
 var wsflash = require('ws-flash-client');
