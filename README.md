@@ -54,11 +54,13 @@ require('policyfile').createServer().listen(prod ? 843 : 10843, app);
 
 app.configure(function() {
 
-	// ..configure other stuff like express globals, jade, stylus, etc..
+	// configure other stuff like express globals, jade, stylus, etc.
+	// ...
 
 	// configure the ws-flash-client middleware:
-	app.use(wsflash.wsFlashClient());	
-
+	// (you can also serve the files yourself from __dirname + /node_modules/ws-flash-client/public)
+	app.use(wsflash.middleware(express));
+	
 	// static file handling must come afterwards:
 	app.use(express.static(pub));
 
@@ -79,9 +81,9 @@ In your HTML page ([JADE](http://jade-lang.com/) syntax shown):
 		head
 			meta(http-equiv='X-UA-Compatible', content='IE=Edge,chrome=1')
 			//if lt IE 8
-				script(src='http://yandex.st/json2/2011-10-19/json2.min.js')
+				script(src='http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.min.js')
 			script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
-			script(src='/ws-flash.js')
+			script(src='/ws-flash.min.js')
 			script(src='/myclientcode.js')
 		body
 			#msg
@@ -149,6 +151,10 @@ Additional options for `$.wsFlashClientInit(options, callback)`:
 
 * Testing! (Not much time for this though. Fill Issues, send Pull Requests.)
 * Add Ender support.
+
+### See Also
+
+* [ws-rpc](https://github.com/ypocat/ws-rpc) - lightweight RPC support for [ws](https://github.com/einaros/ws)
 
 ### License
 

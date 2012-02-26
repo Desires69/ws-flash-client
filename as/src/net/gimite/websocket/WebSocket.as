@@ -46,7 +46,7 @@ public class WebSocket extends EventDispatcher {
   private static const STATUS_CLOSED_ABNORMALLY:int = 1006;
   private static const STATUS_CONNECTION_ERROR:int = 5000;
   
-  private var id:int;
+  private var id:String;
   private var url:String;
   private var scheme:String;
   private var host:String;
@@ -73,7 +73,7 @@ public class WebSocket extends EventDispatcher {
   private var base64Encoder:Base64Encoder = new Base64Encoder();
   
   public function WebSocket(
-      id:int, url:String, protocols:Array, origin:String,
+      id:String, url:String, protocols:Array, origin:String,
       proxyHost:String, proxyPort:int,
       cookie:String, headers:String,
       logger:IWebSocketLogger) {
@@ -129,7 +129,7 @@ public class WebSocket extends EventDispatcher {
   /**
    * @return  This WebSocket's ID.
    */
-  public function getId():int {
+  public function getId():String {
     return this.id;
   }
   
@@ -181,7 +181,7 @@ public class WebSocket extends EventDispatcher {
           "Fail connection by {0}: code={1} reason={2}", origin, code, reason));
     }
     var closeConnection:Boolean =
-        code == STATUS_CONNECTION_ERROR || origin == "server";
+        code == STATUS_CONNECTION_ERROR || origin == "server" || readyState == CONNECTING;
     try {
       if (readyState == OPEN && code != STATUS_CONNECTION_ERROR) {
         var frame:WebSocketFrame = new WebSocketFrame();
@@ -203,13 +203,15 @@ public class WebSocket extends EventDispatcher {
       logger.log("closed");
       var fireErrorEvent:Boolean = readyState != CONNECTING && code == STATUS_CONNECTION_ERROR;
       readyState = CLOSED;
+	// @ypocat: per the last sub-section of http://dev.w3.org/html5/websockets/#feedback-from-the-protocol
+	// BOTH simple-error and close need to be fired in case of errorneous disconnection
       if (fireErrorEvent) {
         dispatchEvent(new WebSocketEvent("error"));
-      } else {
+      } /*else {*/
         var wasClean:Boolean = code != STATUS_CLOSED_ABNORMALLY && code != STATUS_CONNECTION_ERROR;
         var eventCode:int = code == STATUS_CONNECTION_ERROR ? STATUS_CLOSED_ABNORMALLY : code;
         dispatchCloseEvent(wasClean, eventCode, reason);
-      }
+      /*}*/
     } else {
       logger.log("closing");
       readyState = CLOSING;
@@ -544,6 +546,7 @@ public class WebSocket extends EventDispatcher {
     event.code = code;
     event.reason = reason;
     dispatchEvent(event);
+	//dogz: remove self from registery
   }
   
   private function removeBufferBefore(pos:int):void {

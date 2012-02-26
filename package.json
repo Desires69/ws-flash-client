@@ -3,7 +3,7 @@
 	"name": "ws-flash-client",
 	"description": "gimite's web-socket-js Flash client shim repackaged as a Connect middleware",
 	"keywords": [ "websockets", "websocket", "flash", "connect", "middleware", "express", "html5", "shim" ],
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"homepage": "http://github.com/ypocat/ws-flash-client",
 	"repository": {
 		"type": "git",

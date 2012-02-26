@@ -68,6 +68,13 @@ $(function() {
 		}
 	});
 
+
+	function randomId() {
+		for(var id = '', i = 0, f = Math.floor, r = Math.random; s = String.fromCharCode, i < 8; i++)
+			id += s(f(r() * 26) + (f(r() * 2) ? 97 : 65)); // bool ? A-Z : a-z
+		return id;
+	}
+
 	function initShim(options) {
 
 	// original code (only minor changes) from:
@@ -84,8 +91,9 @@ $(function() {
    */
   window.WebSocket = function(url, protocols, proxyHost, proxyPort, headers) {
     var self = this;
-    self.__id = WebSocket.__nextId++;
+	do { self.__id = randomId(); } while(WebSocket.__instances[self.__id]);
     WebSocket.__instances[self.__id] = self;
+	if(options.debug) options.logger.log('__instances: ' + JSON.stringify(WebSocket.__instances));
     self.readyState = WebSocket.CONNECTING;
     self.bufferedAmount = 0;
     self.__events = {};
@@ -195,7 +203,23 @@ $(function() {
     }
     var handler = this["on" + event.type];
     if (handler) handler.apply(this, [event]);
+
+	if(event.type === 'close')
+		this.destroy();
   };
+
+	WebSocket.prototype.destroy = function() {
+		this.__events = null;
+		if(this.onopen) delete this.onopen;
+		if(this.onerror) delete this.onerror;
+		if(this.onclose) delete this.onclose;
+
+		WebSocket.__flash.destroy(this.__id);
+		
+		if(options.debug)
+			options.logger.log('removing ' + this.__id + ' from __instances');
+		delete WebSocket.__instances[this.__id];
+	};
 
   /**
    * Handles an event from Flash.
@@ -262,7 +286,7 @@ $(function() {
   WebSocket.__flash = null;
   WebSocket.__instances = {};
   WebSocket.__tasks = [];
-  WebSocket.__nextId = 0;
+  //WebSocket.__nextId = 0;
   
   /**
    * Load a new flash security policy file.

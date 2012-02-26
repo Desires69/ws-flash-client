@@ -18,19 +18,20 @@ $(function() {
 
 			var options = {
 				forceFlash: false,
-				logger: window.console && console.log && console.error ? console :
-					{ log: function() {}, error: function() {} },
+				logger: window.console && console.log && console.debug ?
+					window.console : { log: function() {}, error: function() {} },
 				swfLocation: '/ws-flash-client.swf',
 				crossDomainInsecureSupport: false,
 				policyFile: null,
 				debug: false,
 				chromeFrameFallback: true,
 				swfobjectUrl: 'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js',
+				shimUrl: '/ws-flash-shim.min.js',
 				callback: callback
 			};
 			
 			$.extend(options, _options || {});
-
+			
 			if(window.WebSocket && WebSocket.__initialized)
 				return options.callback();
 			
@@ -41,7 +42,7 @@ $(function() {
 			}
 
 			$.getScriptCached(options.swfobjectUrl, function() {
-				$.getScriptCached('/ws-flash-shim.js', function() {
+				$.getScriptCached(options.shimUrl, function() {
 					$.wsFlashInitShim(options);
 				});
 			});

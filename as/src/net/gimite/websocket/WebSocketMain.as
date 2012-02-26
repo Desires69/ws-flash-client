@@ -18,7 +18,7 @@ public class WebSocketMain extends Sprite implements IWebSocketLogger{
   private var callerUrl:String;
   private var debug:Boolean = false;
   private var manualPolicyFileLoaded:Boolean = false;
-  private var webSockets:Array = [];
+  private var webSockets:Object = {};
   private var eventQueue:Array = [];
   
   public function WebSocketMain() {
@@ -37,6 +37,7 @@ public class WebSocketMain extends Sprite implements IWebSocketLogger{
     ExternalInterface.addCallback("create", create);
     ExternalInterface.addCallback("send", send);
     ExternalInterface.addCallback("close", close);
+    ExternalInterface.addCallback("destroy", destroy);
     ExternalInterface.addCallback("loadManualPolicyFile", loadManualPolicyFile);
     ExternalInterface.addCallback("receiveEvents", receiveEvents);
     ExternalInterface.call("WebSocket.__onFlashInitialized");
@@ -96,9 +97,22 @@ public class WebSocketMain extends Sprite implements IWebSocketLogger{
     }
     return eventObj;
   }
+
+	public function destroy(webSocketId:String):void {
+		if(debug)
+			log('Flash: destroying WebSocket ' + webSocketId);
+		var webSocket:WebSocket = webSockets[webSocketId];
+		webSocket.removeEventListener("open", onSocketEvent);
+		webSocket.removeEventListener("close", onSocketEvent);
+		webSocket.removeEventListener("error", onSocketEvent);
+		webSocket.removeEventListener("message", onSocketEvent);
+		delete webSockets[webSocketId];
+		if(debug)
+			log('Flash: destroyed WebSocket ' + webSocketId);
+	}
   
   public function create(
-      webSocketId:int,
+      webSocketId:String,
       url:String, protocols:Array,
       proxyHost:String = null, proxyPort:int = 0,
       headers:String = null):void {
@@ -115,12 +129,12 @@ public class WebSocketMain extends Sprite implements IWebSocketLogger{
     webSockets[webSocketId] = newSocket;
   }
   
-  public function send(webSocketId:int, encData:String):int {
+  public function send(webSocketId:String, encData:String):int {
     var webSocket:WebSocket = webSockets[webSocketId];
     return webSocket.send(encData);
   }
   
-  public function close(webSocketId:int):void {
+  public function close(webSocketId:String):void {
     var webSocket:WebSocket = webSockets[webSocketId];
     webSocket.close();
   }
