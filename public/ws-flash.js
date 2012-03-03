@@ -25,7 +25,7 @@ $(function() {
 				policyFile: null,
 				debug: false,
 				chromeFrameFallback: true,
-				swfobjectUrl: 'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js',
+				swfobjectUrl: '//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js',
 				shimUrl: '/ws-flash-shim.min.js',
 				callback: callback
 			};

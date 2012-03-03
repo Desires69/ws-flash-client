@@ -35,7 +35,7 @@ $(function() {
 					
 				if(e) {
 					if(options.chromeFrameFallback) {
-						$.getScriptCached('http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js', function() {
+						$.getScriptCached('//ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js', function() {
 							CFInstall.check({ mode: 'overlay' });
 						});
 					}

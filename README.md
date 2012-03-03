@@ -1,5 +1,10 @@
 ## ws-flash-client: gimite's [WebSocket](https://github.com/gimite/web-socket-js) Flash client shim adapted as Connect [middleware](https://github.com/senchalabs/connect) for easy usage in Node.js' [Express](http://expressjs.com/) framework, to be used with einaros' [ws](https://github.com/einaros/ws) WebSocket server
 
+### Important
+
+For increased reliability, it is suggested to use the WebSocket protocol over encrypted connections only. Some proxy servers intervene in the unencrypted form of the protocol in a way which prevents it from operation. This is being addressed by "masking" in newer versions of the protocol, however too many older versions are already in the wild. See the second code example on the [ws-rpc](https://github.com/ypocat/ws-rpc) project page on how to configure HTTPS support in your Node.
+
+
 ### Why
 
 * 99% of WebSocket use cases currently can be covered with just 2 transports: the WebSocket itself, or Adobe Flash client talking through the WebSocket protocol.
@@ -81,8 +86,8 @@ In your HTML page ([JADE](http://jade-lang.com/) syntax shown):
 		head
 			meta(http-equiv='X-UA-Compatible', content='IE=Edge,chrome=1')
 			//if lt IE 8
-				script(src='http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.min.js')
-			script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
+				script(src='//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.min.js')
+			script(src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
 			script(src='/ws-flash.min.js')
 			script(src='/myclientcode.js')
 		body
